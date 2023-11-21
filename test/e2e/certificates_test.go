@@ -116,15 +116,17 @@ var _ = Describe("ACME Certificate", Ordered, func() {
 							Solvers: []v1.ACMEChallengeSolver{
 								{
 									DNS01: &v1.ACMEChallengeSolverDNS01{
-										Route53: &v1.ACMEIssuerDNS01ProviderRoute53{
-											AccessKeyID: string(awsAccessKeyID),
-											SecretAccessKey: certmanagermetav1.SecretKeySelector{
-												LocalObjectReference: certmanagermetav1.LocalObjectReference{
-													Name: secretName,
+										Webhook: &v1.ACMEIssuerDNS01ProviderWebhook{
+											GroupName: "acme.borup.work",
+											SolverName: "ibmcis",
+											Config: &v1.Config{
+											        ApiKeySecretRef: certmanagermetav1.SecretKeySelector{
+												        LocalObjectReference: certmanagermetav1.LocalObjectReference{
+													        Name: ibmcis-credentials,
+														Key: api-token,
 												},
-												Key: secretKey,
-											},
-											Region: awsRegion,
+											},										
+										   },
 										},
 									},
 								},
@@ -221,8 +223,17 @@ var _ = Describe("ACME Certificate", Ordered, func() {
 							Solvers: []v1.ACMEChallengeSolver{
 								{
 									DNS01: &v1.ACMEChallengeSolverDNS01{
-										Route53: &v1.ACMEIssuerDNS01ProviderRoute53{
-											Region: awsRegion,
+										Webhook: &v1.ACMEIssuerDNS01ProviderWebhook{
+											GroupName: "acme.borup.work",
+											SolverName: "ibmcis",
+											Config: &v1.Config{
+												ApiKeySecretRef: certmanagermetav1.SecretKeySelector{
+													LocalObjectReference: certmanagermetav1.LocalObjectReference{
+														Name: ibmcis-credentials,
+														Key: api-token,
+														},
+													},
+												},
 										},
 									},
 								},
